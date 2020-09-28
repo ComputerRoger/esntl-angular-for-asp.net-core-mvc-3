@@ -11,7 +11,20 @@ export class Cart {
     constructor(private repo: Repository) {
         repo.getSessionData<ProductSelection[]>("cart").subscribe(cartData => {
             if (cartData != null) {
-                cartData.forEach(item => this.selections.push(item));
+                //cartData.forEach(item => this.selections.push(item));
+                cartData.forEach(item =>
+                {
+                    //	Transform the data structure into a full instance with methods.
+                    let ps = new ProductSelection(this,
+                        item.productId,
+                        item.name,
+                        item.price,
+                        item.quantity);
+                    //	Push the instance into the collection.
+                    //	Two-way binding will now work because properties and methods exist.
+                    //	Pushing the bare structure fails to provide methods and properties.
+                    this.selections.push(ps);
+                });
                 this.update(false);
             }
         });
